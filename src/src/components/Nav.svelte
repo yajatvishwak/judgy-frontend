@@ -1,0 +1,80 @@
+<script>
+  import store from "../store/store";
+</script>
+
+<div class="flex md:items-center flex-col md:flex-row w-full">
+  <div class="text-5xl">Judgy.</div>
+  <div class="md:ml-auto mt-4 mr-4">
+    <div class="join w-full">
+      <input
+        class="input w-full input-bordered join-item"
+        placeholder="Search"
+      />
+      <button class="btn join-item"
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="text-2xl flex gap-3 mr-2 mt-4">
+    <div class="tooltip tooltip-bottom" data-tip="Add Single">
+      <button
+        on:click={() => {
+          $store.isAddModalOpen = true;
+        }}
+        class="btn btn-circle"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 4.5v15m7.5-7.5h-15"
+          />
+        </svg>
+      </button>
+    </div>
+    <div class="tooltip tooltip-bottom" data-tip="Add CSV">
+      <button
+        on:click={() => {
+          $store.isAddCSVModalOpen = true;
+        }}
+        class="btn btn-circle"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
