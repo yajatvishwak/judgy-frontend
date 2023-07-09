@@ -1,24 +1,61 @@
 <script>
+  // @ts-nocheck
+
   import Label from "../components/Label.svelte";
   import ModalWrapper from "../components/ModalWrapper.svelte";
   import Nav from "../components/Nav.svelte";
   import Typewriter from "svelte-typewriter";
   import { getRandomLoadingMessage } from "../store/loading";
   import axios from "axios";
+  import { onMount } from "svelte";
 
   export let params = {};
   let usermessage = "";
   let chatbox;
   let scroll;
+  let marketQuestion = [
+    {
+      question: "Who is the target audience of this idea?",
+      title: "Target Audience",
+    },
+    {
+      question: "What is the market size of this idea?",
+      title: "Market Size",
+    },
+    { question: "What are the pitfalls of this idea?", title: "Pitfalls" },
+    {
+      question: "Are there any platforms like the idea, that already exist?",
+      title: "Existing Platforms",
+    },
+    {
+      question: "What is the potential of this idea?",
+      title: "Potential",
+    },
+  ];
   let BASEURL = import.meta.env.VITE_BASEURL;
   async function dataload() {
+    loading = true;
     const response = await axios.get(BASEURL + "/get-project/" + params.id);
+    loading = false;
+    data = response.data.project;
+    data.marketAgentAnalysis = data.marketAgentAnalysis.map((item) => {
+      return {
+        question: marketQuestion.find((i) => {
+          console.log(i.question, item.question);
+          return i.question === item.question;
+        }).title,
+        answer: item.answer,
+      };
+    });
   }
+  onMount(async () => {
+    dataload();
+  });
   let data = {
     isReviewed: true,
-    ideaDetails: {
-      title: "Judgy",
-      longDescription: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
+
+    title: "Judgy",
+    longDescription: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
       voluptatum, quibusdam, quia, quae voluptates dolorum quod
       voluptatibus quos quas voluptate quidem? Quisquam voluptatum,
       quibusdam, quia, quae voluptates dolorum quod voluptatibus quos
@@ -27,9 +64,9 @@
       quidem? Quisquam voluptatum, quibusdam, quia, quae voluptates
       dolorum quod voluptatibus quos quas voluptate quidem? Quisquam
       `,
-      shortDescription: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam`,
-      theme: "Healthcare",
-    },
+    shortDescription: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam`,
+    theme: "Healthcare",
+
     marketAgentAnalysis: [
       {
         question: "Target Audience",
@@ -63,11 +100,15 @@
       },
     ],
     chat: [
-      { user: "You", chat: "bro what bro one sike this is" },
-      { user: "Judgy", chat: "Yes bro full one gomma scene" },
+      {
+        input: "bro what bro one sike this is",
+        output: "aha",
+      },
     ],
+    chathistory: [],
   };
   let loading = false;
+  let chatloading = false;
 </script>
 
 <ModalWrapper>
@@ -81,29 +122,29 @@
         </div>
       </div>
     {:else}
-      <div class="grid md:grid-cols-3 mt-16 gap-16">
+      <div class="grid md:grid-cols-4 mt-16 gap-7">
         <div class="flex flex-col">
           <div>
             <Label>Project Title</Label>
-            <div class="text-4xl font-semibold">SutureLogs</div>
+            <div class="text-4xl font-semibold">{data.title}</div>
           </div>
 
           <div class="mt-10">
             <Label>Project Description</Label>
             <div class="mt-1">
-              {data.ideaDetails.shortDescription}
+              {data.shortDescription}
             </div>
           </div>
           <div class="mt-10">
-            <Label>Project Detailed Description</Label>
+            <Label>Detailed Description</Label>
             <div class="mt-1">
-              {data.ideaDetails.longDescription}
+              {data.longDescription}
             </div>
           </div>
           <div class="mt-10">
             <Label>Theme</Label>
             <div class="flex gap-3 justify-between items-center">
-              {data.ideaDetails.theme}
+              {data.theme}
             </div>
           </div>
           <div class="mt-10">
@@ -203,21 +244,31 @@
             <div>Market Analysis</div>
           </div>
           <div class="mt-7 flex-col flex gap-7">
-            {#each data.marketAgentAnalysis as { question, answer }, index}
-              <div>
-                <Label>{question}</Label>
-                <Typewriter
-                  mode={"cascade"}
-                  delay={index * 1000}
-                  scrambleSlowdown={false}
-                  interval={10}
-                >
-                  {answer}
-                </Typewriter>
+            {#if "marketAgentAnalysis" in data}
+              {#each data.marketAgentAnalysis as { question, answer }, index}
+                <div>
+                  <Label>
+                    {question}</Label
+                  >
+                  <Typewriter
+                    mode={"cascade"}
+                    delay={index * 1000}
+                    scrambleSlowdown={false}
+                    interval={10}
+                  >
+                    {answer}
+                  </Typewriter>
+                </div>
+              {/each}
+            {:else}
+              <div class="text-gray-500 animate-pulse">
+                Generating Market Analysis
               </div>
-            {/each}
+            {/if}
           </div>
-          <div class="mt-7 font-bold flex gap-3">
+        </div>
+        <div class="flex flex-col">
+          <div class=" font-bold flex gap-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -274,31 +325,41 @@
             bind:this={chatbox}
             class="flex flex-col bg-slate-50 p-4 my-4 mb-4 h-[500px] rounded-md overflow-auto"
           >
-            {#each data.chat as { chat, user }, index}
-              {#if user === "Judgy"}
+            {#if "chat" in data}
+              {#each data.chat as { output, input }}
                 <div class="flex flex-col border-b py-2">
                   <div
                     class="font-bold text-sm tracking-wider opacity-50 text-slate-900"
                   >
-                    {user}
+                    You
                   </div>
-                  <div class="">{chat}</div>
+                  <div class="">{input}</div>
                 </div>
-              {:else}
                 <div class="flex flex-col border-b py-2">
-                  <div class="font-bold text-sm tracking-wider text-slate-900">
-                    {user}
+                  <div
+                    class="font-bold text-sm tracking-wider opacity-50 text-slate-900"
+                  >
+                    Judgy
                   </div>
-                  <div class="">{chat}</div>
+                  <div class="">{output}</div>
                 </div>
-              {/if}
-            {/each}
+              {/each}
+            {/if}
             <div bind:this={scroll} id="scroll" />
           </div>
           <form
-            on:submit={() => {
+            on:submit|preventDefault={async () => {
               if (usermessage === "") return;
-              data.chat = [...data.chat, { chat: usermessage, user: "You" }];
+              if (chatloading) return;
+              if (!("chat" in data)) data.chat = [];
+              chatloading = true;
+              const response = await axios.post(BASEURL + "/chat-agent", {
+                question: usermessage,
+                project_id: params.id,
+                chathistory: data.chat,
+              });
+              chatloading = false;
+
               usermessage = "";
               chatbox.scrollIntoView(true);
               scroll.scrollIntoView(true);
@@ -310,21 +371,25 @@
               type="text"
               class="input input-bordered w-full join-item"
             />
-            <button type="submit" class="btn join-item"
-              ><svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-4 h-4"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
-                />
-              </svg>
+            <button type="submit" disabled={chatloading} class="btn join-item">
+              {#if chatloading}
+                <div class="loading loading-spinner" />
+              {:else}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-4 h-4"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
+                  />
+                </svg>
+              {/if}
             </button>
           </form>
         </div>

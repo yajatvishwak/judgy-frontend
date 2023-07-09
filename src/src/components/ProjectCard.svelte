@@ -10,12 +10,9 @@
 </script>
 
 <div class="border rounded-md shadow-md">
-  <div class="text-2xl p-4 pb-0">Speechinator 3000</div>
+  <div class="text-2xl p-4 pb-0">{title}</div>
   <div class="mt-4 p-4 pt-0">
-    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolorum accusamus
-    magni dignissimos nobis ipsam modi deserunt ab? Voluptates repellendus
-    placeat doloremque minus, quae, expedita ducimus pariatur atque obcaecati
-    perspiciatis distinctio?
+    {description}
   </div>
   <div class="flex items-center">
     <div class="flex flex-wrap px-4 gap-2">
