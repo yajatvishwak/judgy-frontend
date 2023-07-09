@@ -4,11 +4,16 @@
   import Nav from "../components/Nav.svelte";
   import Typewriter from "svelte-typewriter";
   import { getRandomLoadingMessage } from "../store/loading";
+  import axios from "axios";
 
   export let params = {};
   let usermessage = "";
   let chatbox;
   let scroll;
+  let BASEURL = import.meta.env.VITE_BASEURL;
+  async function dataload() {
+    const response = await axios.get(BASEURL + "/get-project/" + params.id);
+  }
   let data = {
     isReviewed: true,
     ideaDetails: {

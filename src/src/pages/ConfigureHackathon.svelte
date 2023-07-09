@@ -1,6 +1,19 @@
 <script>
+  import toast from "svelte-french-toast";
   import ModalWrapper from "../components/ModalWrapper.svelte";
   import Nav from "../components/Nav.svelte";
+  import axios from "axios";
+  let BASEURL = import.meta.env.VITE_BASEURL;
+  let loading = false;
+  let data = { theme: "", technologies: "" };
+  async function submit() {
+    loading = true;
+    const response = await axios.post(BASEURL + "/create-hackathon", data);
+    if (response.data.message === "Hackathon created")
+      toast.success("Hackathon Configured");
+    else toast.error("Error creating hackathon");
+    loading = false;
+  }
 </script>
 
 <ModalWrapper>
@@ -34,17 +47,25 @@
           <div class="uppercase label-text-alt text-base font-bold opacity-50">
             What are the themes of the hackathon?
           </div>
-          <input type="text" class="input input-bordered w-full" />
+          <input
+            type="text"
+            bind:value={data.theme}
+            class="input input-bordered w-full"
+          />
         </div>
         <div class="flex flex-col gap-1">
           <div class="uppercase label-text-alt text-base font-bold opacity-50">
             List any required code libraries, dependencies, or APIs that must be
             used.
           </div>
-          <input type="text" class="input input-bordered w-full" />
+          <input
+            type="text"
+            bind:value={data.technologies}
+            class="input input-bordered w-full"
+          />
         </div>
         <div>
-          <button class="btn">
+          <button on:click={submit} class="btn">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

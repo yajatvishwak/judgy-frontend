@@ -24,7 +24,29 @@
     count.longDescription = data.longDescription.length;
   }
   async function submit() {
-    const response = await axios.post(BASEURL + "");
+    if (count.title < 10 || count.title > 50) {
+      toast.error("Title should be between 10 and 50 characters long");
+      return;
+    }
+    if (count.shortDescription < 50 || count.shortDescription > 150) {
+      toast.error(
+        "Short description should be between 50 and 150 characters long"
+      );
+      return;
+    }
+    if (count.longDescription < 100 || count.longDescription > 2500) {
+      toast.error(
+        "Long description should be between 100 and 2500 characters long"
+      );
+      return;
+    }
+    if (loading) return;
+    loading = true;
+    const response = await axios.post(BASEURL + "/create-project", data);
+    loading = false;
+    if (response.data.message === "Project created")
+      toast.success("Project created");
+    else toast.error("Something went wrong");
     data = {
       title: "",
       shortDescription: "",
@@ -32,6 +54,7 @@
       githubLink: "",
       demoLink: "",
     };
+    $store.isAddModalOpen = false;
   }
 </script>
 
@@ -143,22 +166,39 @@
       </div>
     </div>
     <div class="flex">
-      <button class="btn btn-ghost" on:click={submit}>Clear</button>
-      <button class="btn btn-circle ml-auto"
-        ><svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-6 h-6"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-          />
-        </svg>
+      <button
+        class="btn btn-ghost"
+        on:click={() => {
+          data.title = "";
+          data.shortDescription = "";
+          data.longDescription = "";
+          data.githubLink = "";
+          data.demoLink = "";
+        }}>Clear</button
+      >
+      <button
+        on:click={submit}
+        disabled={loading}
+        class="btn btn-circle ml-auto"
+      >
+        {#if loading}
+          <div class="loading loading-spinner" />
+        {:else}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+            />
+          </svg>
+        {/if}
       </button>
     </div>
   </div>
