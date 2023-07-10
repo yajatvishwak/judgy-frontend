@@ -5,8 +5,7 @@
   import ProjectCard from "../components/ProjectCard.svelte";
   import axios from "axios";
   import { getRandomLoadingMessage } from "../store/loading";
-  import store from "../store/store";
-
+  export let params;
   let BASEURL = import.meta.env.VITE_BASEURL;
   let data = {
     projects: [],
@@ -15,9 +14,7 @@
   onMount(async () => {
     loading = true;
     let response;
-
-    response = await axios.get(BASEURL + "/get-all");
-
+    response = await axios.post(BASEURL + "/search", { query: params.id });
     loading = false;
     data.projects = response.data.projects;
   });
@@ -26,6 +23,9 @@
 <ModalWrapper>
   <div class="p-3 md:p-5 lg:p-10">
     <Nav />
+    <div class="text-xl mt-6">
+      Searching for: <span class="font-semibold">{params.id} </span>
+    </div>
     <section class="grid gap-5 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 mt-10">
       {#if loading}
         <div
@@ -36,13 +36,14 @@
             {getRandomLoadingMessage()}
           </div>
         </div>
-      {:else if data.projects}
-        {#each data.projects as project}
+      {:else}
+        {#each data.projects as project, index}
           <ProjectCard
             description={project.shortDescription}
             title={project.title}
             id={project._id}
             isReviewed={project.isReviewed}
+            index={index + 1}
           />
         {/each}
       {/if}

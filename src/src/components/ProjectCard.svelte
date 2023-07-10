@@ -1,6 +1,8 @@
 <script>
   import { push } from "svelte-spa-router";
   export let isReviewed = false;
+  import ordinal from "ordinal";
+  export let index = null;
   export let title = "Project Title";
   export let description = `Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolorum accusamus
     magni dignissimos nobis ipsam modi deserunt ab? Voluptates repellendus
@@ -49,6 +51,11 @@
               d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
             />
           </svg>
+        </div>
+      {/if}
+      {#if index}
+        <div class="tooltip tooltip-bottom" data-tip={`Match`}>
+          <div class="badge">{ordinal(index)} closest match</div>
         </div>
       {/if}
     </div>

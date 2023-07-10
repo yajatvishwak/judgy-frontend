@@ -1,14 +1,24 @@
 <script>
+  import { push } from "svelte-spa-router";
   import store from "../store/store";
+  let search = "";
 </script>
 
 <div class="flex md:items-center flex-col md:flex-row w-full">
-  <div class="text-5xl">Judgy.</div>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <div on:click={() => push("/")} class="text-5xl cursor-pointer">Judgy.</div>
   <div class="md:ml-auto mt-4 mr-4">
-    <div class="join w-full">
+    <form
+      on:submit|preventDefault={() => {
+        window.location.href = "/#/search/" + search;
+        window.location.reload();
+      }}
+      class="join w-full"
+    >
       <input
         class="input w-full input-bordered join-item"
         placeholder="Search"
+        bind:value={search}
       />
       <button class="btn join-item"
         ><svg
@@ -26,7 +36,7 @@
           />
         </svg>
       </button>
-    </div>
+    </form>
   </div>
 
   <div class="text-2xl flex gap-3 mr-2 mt-4">
