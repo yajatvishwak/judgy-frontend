@@ -9,12 +9,12 @@
   export let id = 0;
 </script>
 
-<div class="border rounded-md shadow-md">
+<div class="border rounded-md shadow-md h-full flex flex-col">
   <div class="text-2xl p-4 pb-0">{title}</div>
   <div class="mt-4 p-4 pt-0">
     {description}
   </div>
-  <div class="flex items-center">
+  <div class="flex items-center mt-auto">
     <div class="flex flex-wrap px-4 gap-2">
       {#if isReviewed}
         <div class="tooltip tooltip-bottom" data-tip="Reviewed">
@@ -24,7 +24,7 @@
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-6 h-6"
+            class="w-6 h-6 text-purple-500"
           >
             <path
               stroke-linecap="round"

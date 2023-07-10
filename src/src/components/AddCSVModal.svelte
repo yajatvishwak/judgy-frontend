@@ -1,11 +1,22 @@
 <script>
+  import toast from "svelte-french-toast";
   import store from "../store/store";
   import Papa from "papaparse";
+  import axios from "axios";
+  let BASEURL = import.meta.env.VITE_BASEURL;
   let file = null;
+  async function sendToServer(data) {
+    const response = await axios.post(BASEURL + "/create-project", data);
+    if (response.data.message === "Project created")
+      toast.success("Project created");
+    else toast.error("Something went wrong");
+  }
+  let loading = false;
   async function submit() {
     Papa.parse(file[0], {
       header: true,
       complete: function (results) {
+        loading = true;
         results.errors.forEach((error) => {
           results.data.splice(error.row, 1);
         });
@@ -18,7 +29,22 @@
             demoLink: item["Demo Link"],
           };
         });
-        console.log(fin);
+        fin.forEach((item) => {
+          if (
+            item.title.length < 10 ||
+            item.title.length > 50 ||
+            item.shortDescription.length < 50 ||
+            item.shortDescription.length > 150 ||
+            item.longDescription.length < 100 ||
+            item.longDescription.length > 2500
+          ) {
+            toast.error("Skipping invalid project");
+            return;
+          } else {
+            sendToServer(item);
+          }
+        });
+        loading = false;
       },
     });
   }
@@ -47,21 +73,29 @@
     <div class="flex">
       <button on:click={() => (file = null)} class="btn btn-ghost">Clear</button
       >
-      <button on:click={submit} class="btn btn-circle ml-auto"
-        ><svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-6 h-6"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-          />
-        </svg>
+      <button
+        on:click={submit}
+        disabled={loading}
+        class="btn btn-circle ml-auto"
+      >
+        {#if loading}
+          <div class="loading loading-spinner" />
+        {:else}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+            />
+          </svg>
+        {/if}
       </button>
     </div>
   </div>
