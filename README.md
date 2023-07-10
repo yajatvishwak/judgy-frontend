@@ -1,4 +1,4 @@
-# Judgy - Backend
+# Judgy - Frontend
 #### YOUR TRUSTED ALLY FOR HACKATHON JUDGING
 #
 The backend code for the project can be found here [https://github.com/steinskeeper/judgy-backend](https://github.com/steinskeeper/judgy-backend)
