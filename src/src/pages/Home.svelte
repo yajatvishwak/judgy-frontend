@@ -5,7 +5,6 @@
   import ProjectCard from "../components/ProjectCard.svelte";
   import axios from "axios";
   import { getRandomLoadingMessage } from "../store/loading";
-  import store from "../store/store";
 
   let BASEURL = import.meta.env.VITE_BASEURL;
   let data = {

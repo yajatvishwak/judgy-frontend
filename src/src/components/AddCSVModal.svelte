@@ -62,7 +62,7 @@
       class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button
     >
     <h3 class="font-bold text-lg">Add Multiple Hackathon Submissions</h3>
-    <div class="py-4 flex flex-col gap-3">
+    <!-- <div class="py-4 flex flex-col gap-3">
       <input
         type="file"
         bind:files={file}
@@ -97,6 +97,15 @@
           </svg>
         {/if}
       </button>
+    </div> -->
+    <div>
+      This feature has been disabled to preserve resources, Please view the
+      video submission to see how to add multiple projects.
+      <button
+        class="btn btn-sm"
+        on:click={() => (window.location.href = "https://youtu.be/8UYPhdfQ1-w")}
+        >Youtube video</button
+      >
     </div>
   </div>
 </div>
