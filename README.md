@@ -1,47 +1,47 @@
-# Svelte + Vite
+# Judgy - Frontend
+#### YOUR TRUSTED ALLY FOR HACKATHON JUDGING
+#
+The backend code for the project can be found here [https://github.com/steinskeeper/judgy-backend](https://github.com/steinskeeper/judgy-backend)
 
-This template should help get you started developing with Svelte in Vite.
+## What is Judgy?
 
-## Recommended IDE Setup
+Judgy streamlines the evaluation process for hackathon judges by leveraging AI to assist in code examination, market research, and providing interactive chat capabilities, along with an efficient semantic search functionality to navigate through numerous project submissions.
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+## How does it work?
 
-## Need an official Svelte framework?
+Judgy uses Langchains and models in Google Vertex AI to build the following agents
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+1. Market Research Agent: This agent uses the project description to ask a set of predefined questions about the idea, such as the size of the target market, existing solutions, and the uniqueness of the project. These questions provide judges with quick insights into the project's potential.
 
-## Technical considerations
+2. Code Analysis Agent: The code agent thoroughly scans the entire project's codebase and asks predefined questions about the technologies used, whether the project adheres to the hackathon's rules, and the quality of the code. This analysis helps judges evaluate the technical aspects of the project.
 
-**Why use this over SvelteKit?**
+3. Chat Agent: This agent offers an interactive chat session where judges can ask questions and have a conversation. It combines the knowledge obtained from both the code analysis and market research agents, providing judges with comprehensive information to make informed decisions.
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+4. Search Agent: With a large number of submissions in a hackathon, finding specific projects can be challenging. The search agent enables judges to perform searches using plain English queries, making it easier to find relevant projects based on specific criteria.
 
-This template contains as little as possible to get started with Vite + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+## Technologies Used
 
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
+The backend is using the following technologies:
 
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
+-   FlaskAPI
+-   MongoDB
+-   Google Vertex AI
+-   LangChains
 
-**Why include `.vscode/extensions.json`?**
+The frontend is using the following technologies:
 
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
+-  SvelteJS
+-  Tailwind CSS
 
-**Why enable `checkJs` in the JS template?**
+## Setup
 
-It is likely that most cases of changing variable types in runtime are likely to be accidental, rather than deliberate. This provides advanced typechecking out of the box. Should you like to take advantage of the dynamically-typed nature of JavaScript, it is trivial to change the configuration.
+To get started with the project, follow these steps:
 
-**Why is HMR not preserving my local component state?**
+1.  Clone the repository: `git clone https://github.com/yajatvishwak/judgy-frontend`
+2.  Install dependencies: `npm install`
+3.  Start the server: `npm run dev`
 
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/sveltejs/svelte-hmr/tree/master/packages/svelte-hmr#preservation-of-local-state).
 
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
+## Submission Video
 
-```js
-// store.js
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
-```
